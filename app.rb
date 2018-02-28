@@ -16,16 +16,34 @@ get '/visit' do
 end
 
 get '/contact' do
-	
 	erb :contact
+end
+
+get '/admin' do
+	erb :admin
+end
+
+post '/admin' do
+	@login = params['login']
+	@password = params['password']
+	if @login == "admin" && @password == 'secret'
+		@file = File.open("./public/users.txt", "r")
+		erb :admin_page
+	else
+		erb 'Access denide'
+		erb :admin
+	end
 end
 
 post '/visit' do
 	@name = params['username']
 	@phone = params['phone']
 	@datetime = params['datetime']
-	output = File.open("./public/users1.txt", "a")
-	output.write("#{@name} #{@phone} #{@datetime}\n")
+	@master = params['master']
+
+	output = File.open("./public/users.txt", "a")
+	output.write("#{@name} #{@phone} #{@datetime} #{@master}\n")
 	output.close
-	erb :visit
+	erb 'Спасибо, вы записались'
+	 
 end
