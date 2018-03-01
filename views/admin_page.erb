@@ -15,7 +15,7 @@
 		<% @arr.each.with_index do |el, i| %>
 		<tr> 
 			<th scope="row"><%= i+1 %></th>
-			<td><%= el[0] %></td> 
+			<td><%=el[0] %></td> 
 			<td><%=el[1] %></td> 
 			<td><%=el[2] %></td>
 			<td><%=el[3] %></td>
@@ -23,3 +23,8 @@
 		<% end %>
 	</tbody>
 </table>
+<br>
+
+<form action="/admin" method="POST">
+<button name="clean" value="clean" type="submit" class="btn btn-primary">Очистить список</button>
+</form>
