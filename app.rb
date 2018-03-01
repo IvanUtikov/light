@@ -23,56 +23,42 @@ get '/admin' do
 	erb :admin
 end
 
-
-
 post '/admin' do
 	login = params[:login]
 	password = params[:password]
 	clean = params[:clean]
-
 	if login == 'admin' && password == 'secret' 
-
 		file = File.open("./public/users.txt", "r")
 		@arr = Array.new
-
 		while (line = file.gets)
 			@arr << line.split(';')
 		end
-
 		file.close
 		erb :admin_page
-
 	elsif clean == 'clean'
-
 		file = File.open("./public/users.txt", "wb")
 		file.write('')
 		file.close
-
 		file = File.open("./public/users.txt", "r")
 		@arr = Array.new
-
 		while (line = file.gets)
 			@arr << line.split(';')
 		end
-
 		file.close
 		erb :admin_page	
-
 	else
 		erb "ACCESS DENIED"
 	end
 end
-
 
 post '/visit' do
 	name = params[:username]
 	phone = params[:phone]
 	datetime = params[:datetime]
 	master = params[:master]
-
-
+	color = params[:color]
 	output = File.open("./public/users.txt", "a")
-	output.write("#{name};#{phone};#{datetime};#{master}\n")
+	output.write("#{name};#{phone};#{datetime};#{master};#{color}\n")
 	output.close
 	erb 'Спасибо, вы записались'
 	 
