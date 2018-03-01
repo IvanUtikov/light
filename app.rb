@@ -26,50 +26,53 @@ end
 
 
 post '/admin' do
-	@login = params['login']
-	@password = params['password']
-	@clean = params['clean']
+	login = params[:login]
+	password = params[:password]
+	clean = params[:clean]
 
-	if @login == "admin" && @password == 'secret' 
+	if login == 'admin' && password == 'secret' 
 
-			@file = File.open("./public/users.txt", "r")
-			@arr = Array.new
-
-			while (line = @file.gets)
-				@arr << line.split(';')
-			end
-
-			@file.close
-			erb :admin_page
-	elsif @clean == 'clean'
-		@file = File.open("./public/users.txt", "w")
-		@file.write('')
-		@file.close
-
-		@file = File.open("./public/users.txt", "r")
+		file = File.open("./public/users.txt", "r")
 		@arr = Array.new
 
-		while (line = @file.gets)
+		while (line = file.gets)
 			@arr << line.split(';')
 		end
 
-		@file.close
+		file.close
+		erb :admin_page
+
+	elsif clean == 'clean'
+
+		file = File.open("./public/users.txt", "wb")
+		file.write('')
+		file.close
+
+		file = File.open("./public/users.txt", "r")
+		@arr = Array.new
+
+		while (line = file.gets)
+			@arr << line.split(';')
+		end
+
+		file.close
 		erb :admin_page	
+
 	else
-		erb "acess denied"
+		erb "ACCESS DENIED"
 	end
 end
 
 
 post '/visit' do
-	@name = params['username']
-	@phone = params['phone']
-	@datetime = params['datetime']
-	@master = params['master']
-	clean = 'sdfsdfsdf'
+	name = params[:username]
+	phone = params[:phone]
+	datetime = params[:datetime]
+	master = params[:master]
+
 
 	output = File.open("./public/users.txt", "a")
-	output.write("#{@name};#{@phone};#{@datetime};#{@master}\n")
+	output.write("#{name};#{phone};#{datetime};#{master}\n")
 	output.close
 	erb 'Спасибо, вы записались'
 	 
