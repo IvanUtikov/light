@@ -1,5 +1,25 @@
 <h2>Visitors:</h2>
-<% @file.each_line do |line| %>
-  <%= line %>
-  <p></p>
-<% end %>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Date and time</th>
+			<th>Master</th>
+		</tr> 
+	</thead>
+	<tbody>
+		<% @arr.each.with_index do |el, i| %>
+		<tr> 
+			<th scope="row"><%= i+1 %></th>
+			<td><%= el[0] %></td> 
+			<td><%=el[1] %></td> 
+			<td><%=el[2] %></td>
+			<td><%=el[3] %></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>

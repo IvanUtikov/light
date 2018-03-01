@@ -26,8 +26,13 @@ end
 post '/admin' do
 	@login = params['login']
 	@password = params['password']
+
 	if @login == "admin" && @password == 'secret'
 		@file = File.open("./public/users.txt", "r")
+		@arr = Array.new
+		while (line = @file.gets)
+			@arr << line.split(';')
+		end
 		erb :admin_page
 	else
 		erb 'Access denide'
@@ -42,7 +47,7 @@ post '/visit' do
 	@master = params['master']
 
 	output = File.open("./public/users.txt", "a")
-	output.write("#{@name} #{@phone} #{@datetime} #{@master}\n")
+	output.write("#{@name};#{@phone};#{@datetime};#{@master}\n")
 	output.close
 	erb 'Спасибо, вы записались'
 	 

@@ -1,19 +1,2 @@
-sdf dsf sdf 
-sdf sfd sdf 
-sdf sfd sdf 
-sdfsdf sdfsdf sdfdsf 
-sdf dsf sdss 
-   
-sfsdf sdfsdf sdfsdf 
-   
-aa aa aa 
-ff ff ff 
-sdfdsf 44 22 Default select
-fgdf gdfg 11 D
-1 2 3 Jessie Pinkman
-gdfg ddd 1 
-gdfg ddd 1 
-1 2 3 Gus Fring
-1 22 33 
-1 22 33 
-1 22 33 Gus Fring
+Ivan;0936949956;12.12.1985;Jessie Pinkman
+Lesya;0981123361;11.12.1985;Gus Fring
