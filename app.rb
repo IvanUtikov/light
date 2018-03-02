@@ -7,6 +7,7 @@ get '/' do
 end
 
 get '/aboutus' do
+	@error = 'something wrong'
 	erb :about
 
 end
@@ -58,9 +59,14 @@ post '/visit' do
 	datetime = params[:datetime]
 	master = params[:master]
 	color = params[:color]
-	output = File.open("./public/users.txt", "a")
-	output.write("#{name};#{phone};#{datetime};#{master};#{color}\n")
-	output.close
-	erb 'Спасибо, вы записались'
-	 
+
+	if name == '' || phone == '' || datetime == ''
+		@error = 'Заполните коректно все поля'
+		erb :visit
+	else
+		output = File.open("./public/users.txt", "a")
+		output.write("#{name};#{phone};#{datetime};#{master};#{color}\n")
+		output.close
+		erb 'Спасибо, вы записались'
+	end	 
 end
