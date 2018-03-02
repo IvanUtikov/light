@@ -26,7 +26,7 @@ end
 post '/admin' do
 	login = params[:login]
 	password = params[:password]
-	clean = params[:clean]
+	
 	if login == 'admin' && password == 'secret' 
 		file = File.open("./public/users.txt", "r")
 		@arr = Array.new
@@ -35,7 +35,7 @@ post '/admin' do
 		end
 		file.close
 		erb :admin_page
-	elsif clean == 'clean'
+	elsif params[:clean]
 		file = File.open("./public/users.txt", "wb")
 		file.write('')
 		file.close
@@ -47,7 +47,8 @@ post '/admin' do
 		file.close
 		erb :admin_page	
 	else
-		erb "ACCESS DENIED"
+		@msg = "ACCESS DENIED"
+		erb :admin
 	end
 end
 
