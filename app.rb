@@ -7,7 +7,6 @@ get '/' do
 end
 
 get '/aboutus' do
-	@error = 'something wrong'
 	erb :about
 
 end
@@ -35,7 +34,7 @@ post '/admin' do
 			@arr << line.split(';')
 		end
 		file.close
-		erb :admin_page
+		return erb :admin_page
 	elsif params[:clean]
 		file = File.open("./public/users.txt", "wb")
 		file.write('')
@@ -46,10 +45,10 @@ post '/admin' do
 			@arr << line.split(';')
 		end
 		file.close
-		erb :admin_page	
+		return erb :admin_page	
 	else
 		@msg = "ACCESS DENIED"
-		erb :admin
+		return erb :admin
 	end
 end
 
@@ -59,6 +58,7 @@ post '/visit' do
 	@datetime = params[:datetime]
 	@master = params[:master]
 	@color = params[:color]
+	@selected = params[:selected]
 	er = String.new
 	hh = {:username => 'Enter name',
 	 	  :phone => 'Enter phone',
@@ -78,8 +78,6 @@ post '/visit' do
 	erb 'Спасибо, вы записались'
  
 end
-ok
-
 
 
 

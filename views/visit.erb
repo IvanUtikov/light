@@ -20,10 +20,10 @@
 
   <div class="form-group">
   <p><label>Выбрать мастера</label></p>
-  <select name="master" class="form-control">
-    <option>Walter White</option>
-    <option>Jessie Pinkman</option>
-    <option>Gus Fring</option>
+  <select name="master" class="form-control" >
+    <option <%= @master == 'Walter White' ? 'selected' : '' %> >Walter White</option>
+    <option <%= @master == 'Jessie Pinkman' ? 'selected' : '' %> >Jessie Pinkman</option>
+    <option <%= @master == 'Gus Fring' ? 'selected' : '' %> >Gus Fring</option>
   </select>
   </div>
 
