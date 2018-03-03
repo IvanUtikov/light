@@ -78,6 +78,7 @@ post '/visit' do
 	erb 'Спасибо, вы записались'
  
 end
+ok
 
 
 
