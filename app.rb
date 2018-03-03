@@ -54,19 +54,34 @@ post '/admin' do
 end
 
 post '/visit' do
-	name = params[:username]
-	phone = params[:phone]
-	datetime = params[:datetime]
-	master = params[:master]
-	color = params[:color]
+	@name = params[:username]
+	@phone = params[:phone]
+	@datetime = params[:datetime]
+	@master = params[:master]
+	@color = params[:color]
+	er = String.new
+	hh = {:username => 'Enter name',
+	 	  :phone => 'Enter phone',
+	      :datetime => 'Enter date and time'}
+	
 
-	if name == '' || phone == '' || datetime == ''
-		@error = 'Заполните коректно все поля'
-		erb :visit
-	else
-		output = File.open("./public/users.txt", "a")
-		output.write("#{name};#{phone};#{datetime};#{master};#{color}\n")
-		output.close
-		erb 'Спасибо, вы записались'
-	end	 
+	er = hh.select{|k| params[k]==''}.values.join(', ')     
+
+	unless er.empty?
+		@error = er
+		return erb :visit
+	end
+
+	output = File.open("./public/users.txt", "a")
+	output.write("#{@name};#{@phone};#{@datetime};#{@master};#{@color}\n")
+	output.close
+	erb 'Спасибо, вы записались'
+ 
 end
+
+
+
+
+
+
+
