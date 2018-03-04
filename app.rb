@@ -3,7 +3,12 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+def get_db
+	SQLite3::Database.new 'barbershop.db'
+end
+
 configure do
+
 	db = get_db
 	db.execute 'CREATE TABLE IF NOT EXISTS 
 		"Users" 
@@ -105,13 +110,11 @@ post '/visit' do
 	output = File.open("./public/users.txt", "a")
 	output.write("#{@name};#{@phone};#{@datetime};#{@master};#{@color}\n")
 	output.close
-	 erb 'Спасибо, вы записались'
+	erb 'Спасибо, вы записались'
  
 end
 
-def get_db
-	 SQLite3::Database.new 'barbershop.db'
-end
+
 
 
 
