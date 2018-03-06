@@ -4,7 +4,7 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th>ID</th>
+			<th>Id</th>
 			<th>Name</th>
 			<th>Phone</th>
 			<th>Date and time</th>
@@ -13,9 +13,9 @@
 		</tr> 
 	</thead>
 	<tbody>
-		<% @arr.each do |el| %>
+		<% @arrdb.each do |el| %>
 		<tr> 
-			<th scope="row"><%= el[0] %></th>
+			<th scope="row"><%=el[0]%></th>
 			<td><%=el[1] %></td> 
 			<td><%=el[2] %></td> 
 			<td><%=el[3] %></td>
@@ -26,7 +26,3 @@
 	</tbody>
 </table>
 <br>
-
-<form action="/admin" method="POST">
-<button name="clean" type="submit" class="btn btn-primary">Очистить список</button>
-</form>

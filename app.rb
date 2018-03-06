@@ -3,14 +3,9 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
-def get_db
-	SQLite3::Database.new 'barbershop.db'
-end
-
-configure do
-
-	db = get_db
-	db.execute 'CREATE TABLE IF NOT EXISTS 
+def create_users_table
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute('CREATE TABLE IF NOT EXISTS 
 		"Users" 
 		(
 			"Id" INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -19,8 +14,77 @@ configure do
 			"DateStamp" VARCHAR, 
 			"Barber" VARCHAR, 
 			"Color" VARCHAR
-		)'
+		)')
+end
+
+def get_users_table
+	@arr = Array.new
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute('SELECT * FROM "Users"') do |row|
+		@arr << row
+	end
+	return @arr
+end
+
+def drop_users_table
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute('DROP TABLE "Users"')
+	base = create_users_table
+	@arr = Array.new
+	return @arr
+end
+
+def create_barbers_table
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute('CREATE TABLE IF NOT EXISTS 
+		"barbers"
+		(
+			"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+			"name" VARCHAR
+		)')
+
+	arr_check = []
+	arr_barbers = ['Walter White', 'Jessie Pinkman', 'Gus Fring']
 		
+	base.execute('SELECT "name" FROM "barbers"') do |barber|
+		arr_check << barber
+	end
+
+	if arr_check.empty?
+		arr_barbers.each do |barber|
+		base.execute('INSERT INTO barbers ("name") values (?)', [barber])
+		end
+	end
+	return base 	
+end
+
+def get_barbers_name
+	barbers_name = Array.new
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute('SELECT name FROM "barbers"') do |name|
+		barbers_name << name
+	end
+	barbers_name.flatten!
+end
+
+def record_user_to_table(name, phone, datetime, master, color)
+	base = SQLite3::Database.open 'barbershop.db'
+	base.execute 'INSERT INTO
+				"Users"
+				(
+					"Name",
+					"Phone",
+					"DateStamp",
+					"Barber",
+					"color"
+				) 
+				  VALUES (?, ?, ?, ?, ?)', [name, phone, datetime, master, color]	
+
+end
+
+configure do
+	users_table = create_users_table
+	barbers_table = create_barbers_table	
 end
 
 get '/' do
@@ -29,10 +93,10 @@ end
 
 get '/aboutus' do
 	erb :about
-
 end
 
 get '/visit' do
+	@barbers_name = get_barbers_name
 	erb :visit
 end
 
@@ -49,24 +113,11 @@ post '/admin' do
 	password = params[:password]
 	
 	if login == 'admin' && password == 'secret' 
-		file = File.open("./public/users.txt", "r")
-		@arr = Array.new
-		while (line = file.gets)
-			@arr << line.split(';')
-		end
-		file.close
+		@arr = get_users_table
 		return erb :admin_page
 	elsif params[:clean]
-		file = File.open("./public/users.txt", "wb")
-		file.write('')
-		file.close
-		file = File.open("./public/users.txt", "r")
-		@arr = Array.new
-		while (line = file.gets)
-			@arr << line.split(';')
-		end
-		file.close
-		return erb :admin_page	
+		@arr = drop_users_table
+		erb :admin_page
 	else
 		@msg = "ACCESS DENIED"
 		return erb :admin
@@ -81,10 +132,13 @@ post '/visit' do
 	@color = params[:color]
 	@selected = params[:selected]
 	er = String.new
-	hh = {:username => 'Enter name',
+	hh = {
+		  :username => 'Enter name',
 	 	  :phone => 'Enter phone',
-	      :datetime => 'Enter date and time'}
-	
+	      :datetime => 'Enter date and time'
+	     }
+
+	@barbers_name = get_barbers_name
 
 	er = hh.select{|k| params[k]==''}.values.join(', ')     
 
@@ -93,31 +147,7 @@ post '/visit' do
 		return erb :visit
 	end
 
-	db = get_db
-	db.execute 'INSERT INTO
-				Users
-				(
-					Name,
-					Phone,
-					DateStamp,
-					Barber,
-					color
-				) 
-				  VALUES (?, ?, ?, ?, ?)', [@name, @phone, @datetime, @master, @color]
-
-
-
-	output = File.open("./public/users.txt", "a")
-	output.write("#{@name};#{@phone};#{@datetime};#{@master};#{@color}\n")
-	output.close
+	record_user_to_table(@name, @phone, @datetime, @master, @color)
 	erb 'Спасибо, вы записались'
  
 end
-
-
-
-
-
-
-
-
